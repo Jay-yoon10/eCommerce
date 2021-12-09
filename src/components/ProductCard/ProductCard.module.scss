@@ -1,0 +1,39 @@
+.Product {
+    display: flex;
+    // justify-content: center;
+    // align-items: center;
+    flex-direction: column;
+    border: 2px solid burlywood;
+    margin: 20px;
+    width: 400px;
+    height: 600px;
+
+    &__Img {
+        width: 150px;
+    }
+    &__Des {
+        border: 2px solid cadetblue;
+        width: 400px;
+        height: 150px;
+        overflow: scroll;
+        overflow-x: scroll;
+        overflow-y: none;
+    }
+}
+
+.cartIcon {
+    &_On {
+        color: darkblue;
+    }
+    &_Off {
+        color: darkgray;
+    }
+}
+.favIcon {
+    &_On {
+        color: hotpink;
+    }
+    &_Off {
+        color: darkgray;
+    }
+}

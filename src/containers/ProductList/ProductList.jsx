@@ -1,17 +1,18 @@
-import React from "react";
 import ProductCard from "../../components/ProductCard";
-
-const ProductList = ({ products, toggleCart }) => {
+// import ProductDetail from "../../components/ProductDetail";
+import styles from "./ProductList.module.scss";
+const ProductList = ({ products, toggleCart, toggleFav }) => {
     return (
         <div>
             <h2>These are the products</h2>
-            <div>
+            <div className={styles.ProductList__Container}>
                 {products.map((product, index) => {
                     return (
                         <ProductCard
                             key={index}
                             product={product}
                             toggleCart={toggleCart}
+                            toggleFav={toggleFav}
                         />
                     );
                 })}

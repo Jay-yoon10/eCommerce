@@ -1,7 +1,7 @@
 import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-
+import styles from "./Carousel.module.scss";
 const CarouselHome = ({ products }) => {
     return (
         <Carousel>
@@ -9,9 +9,12 @@ const CarouselHome = ({ products }) => {
                 let url = item.image;
                 let title = item.title;
                 let info = item.description;
+                let className = styles.CarouselImg;
                 return (
                     <Carousel.Item>
-                        <img src={url} />
+                        <div className={className}>
+                            <img src={url} />
+                        </div>
                         <Carousel.Caption>
                             <h3>{title}</h3>
                             <p>{info}</p>
