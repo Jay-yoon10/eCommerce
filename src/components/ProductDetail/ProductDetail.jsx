@@ -4,22 +4,32 @@ import { useEffect, useState } from "react";
 import Stock from "../Stock";
 import { Link } from "react-router-dom";
 
-const ProductDetail = ({ stock, setStock }) => {
+const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
     const [alert, setAlert] = useState(true);
-    const [item, setItem] = useState({});
-    const [inputData, setInputData] = useState("");
+    // const [item, setItem] = useState([]);
+    // const [inputData, setInputData] = useState("");
+    // const [newQty, setNewQty] = useState(stock);
     let params = useParams();
-    console.log("Detail stock is ", stock);
-    const getItem = async () => {
-        const response = await fetch(
-            `https://fakestoreapi.com/products/${params.id}`,
-        );
-        const data = await response.json();
-        setItem(data);
+    const sortedProducts = products.sort((a, b) => {
+        return a.id - b.id;
+    });
+    // const getItem = async () => {
+    //     // const response = await fetch(
+    //     //     `https://fakestoreapi.com/products/${params.id}`,
+    //     // );
+    //     // const data = await response.json();
+    //     const data = await products;
+    //     setItem(data);
+    // };
+    // useEffect(() => {
+    //     getItem(params.id);
+    // }, []);
+    const handleCart = () => {
+        toggleCart(sortedProducts[params.id - 1]);
     };
-    useEffect(() => {
-        getItem(params.id);
-    }, []);
+    // const handleDecrement = () => {
+    //     setStock(sortedProducts[params.id - 1].Quantity - 1);
+    // };
 
     useEffect(() => {
         let timer = setTimeout(() => {
@@ -29,14 +39,21 @@ const ProductDetail = ({ stock, setStock }) => {
             clearTimeout(timer);
         };
     }, []);
-
     // let { id } = useParams();
     // const matchingItem = products.find(function (product) {
     //     return product.id == id;
     // });
     let navigate = useNavigate();
-    let imgURL = item.image;
-    console.log(item);
+    let imgURL = sortedProducts[params.id - 1].image;
+
+    // console.log("item is equal to ", item);
+    // const toFind = item.map((x, i) => {
+    //     if ((x.id = params)) {
+    //         let found = x;
+    //         return found;
+    //     }
+    // });
+    // console.log("toFind is equal to ", toFind);
     return (
         <div className="container">
             <div>
@@ -64,41 +81,36 @@ const ProductDetail = ({ stock, setStock }) => {
 
                 <div className="col-md-6 mt-4">
                     <div>
-                        <h4 className="pt-5">{item.title}</h4>
-                        <p>{item.description}</p>
-                        <p>${item.price} AUD</p>
+                        <h4 className="pt-5">
+                            {sortedProducts[params.id - 1].title}
+                        </h4>
+                        <p>{sortedProducts[params.id - 1].description}</p>
+                        <p>${sortedProducts[params.id - 1].price} AUD</p>
                     </div>
 
-                    <Stock stock={stock} />
-                    <button
+                    <Stock
+                        sortedProducts={sortedProducts}
+                        stock={stock}
+                        params={params}
+                    />
+                    {/* <button
                         className="btn btn-danger"
-                        onClick={() => {
-                            setStock(
-                                stock.map((a) => {
-                                    if (a <= 0) {
-                                        return 0;
-                                    }
-                                    return a - 1;
-                                }),
-                            );
-                        }}
+                        onClick={handleDecrement}
                     >
                         Order
+                    </button> */}
+                    <button className="btn btn-danger" onClick={handleCart}>
+                        Add to Cart
                     </button>
                     <button
                         className="btn btn-danger"
-                        onClick={() => navigate("/cart")}
-                    >
-                        Cart
-                    </button>
-                    <button
-                        className="btn btn-danger"
-                        onClick={({ navigation: { goBack } }) => {
-                            goBack();
-                        }}
+                        onClick={() => navigate(-1)}
                     >
                         Backward
                     </button>
+                    <Link to="/cart">
+                        <button className="btn btn-danger">My Cart</button>
+                    </Link>
                 </div>
             </div>
         </div>

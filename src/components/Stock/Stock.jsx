@@ -1,5 +1,7 @@
-const Stock = ({ stock, setStock }) => {
-    return <p>Stock : {stock[0]}</p>;
+import { useParams } from "react-router-dom";
+
+const Stock = ({ sortedProducts, stock, setStock, params }) => {
+    return <p>Stock : {sortedProducts[params.id - 1].Quantity}</p>;
 };
 
 export default Stock;

@@ -18,7 +18,7 @@ import {
 } from "./services/products";
 import firestore from "./firebase";
 import firebase from "firebase/compat/app";
-let productContext = React.createContext();
+let stockContext = React.createContext();
 
 function App() {
     const [products, setProducts] = useState([]);
@@ -27,16 +27,15 @@ function App() {
     const qty = products.map((a, i) => {
         return a.Quantity;
     });
-    const [stock, setStock] = useState([]);
+    const [stock, setStock] = useState(0);
 
-    console.log("qty ", qty);
     const getStock = async () => {
         setStock(qty);
     };
     useEffect(() => {
         getStock();
     }, []);
-    console.log("stock ", stock);
+    // console.log("stock ", stock);
     // const [fbProducts, setFbProducts] = useState([]);
 
     const db = firebase.firestore();
@@ -67,7 +66,7 @@ function App() {
     useEffect(() => {
         getData();
     }, []);
-    console.log("fbProduct is :", products);
+    // console.log("fbProduct is :", products);
     // const fetchDB = async () => {
     //     const response = db.collection("product");
     //     const firestoreData = await response.get();
@@ -138,25 +137,26 @@ function App() {
     // };
     return (
         <div className="App">
-            <Router>
-                <NavBar handleSearch={setSearch} />
-                <Routes>
-                    <Route
-                        path="/dashboard"
-                        element={<CarouselHome products={products} />}
-                    />
-                    <Route
-                        path="/product"
-                        element={
-                            <Dashboard
-                                products={displayItems}
-                                setSearch={setSearch}
-                                toggleCart={toggleCart}
-                                toggleFav={toggleFav}
-                            />
-                        }
-                    />
-                    {/* <Route
+            <stockContext.Provider value={stock}>
+                <Router>
+                    <NavBar handleSearch={setSearch} />
+                    <Routes>
+                        <Route
+                            path="/dashboard"
+                            element={<CarouselHome products={products} />}
+                        />
+                        <Route
+                            path="/product"
+                            element={
+                                <Dashboard
+                                    products={displayItems}
+                                    setSearch={setSearch}
+                                    toggleCart={toggleCart}
+                                    toggleFav={toggleFav}
+                                />
+                            }
+                        />
+                        {/* <Route
                         path="/cart"
                         element={
                             <CartsItem
@@ -166,39 +166,41 @@ function App() {
                             />
                         }
                     /> */}
-                    <Route
-                        path="/cart"
-                        element={
-                            <Cart
-                                products={products}
-                                toggleCart={toggleCart}
-                                stock={stock}
-                                setStock={setStock}
-                            />
-                        }
-                    />
-                    <Route
-                        path="/favourite"
-                        element={
-                            <FavItem
-                                products={products}
-                                toggleFav={toggleFav}
-                            />
-                        }
-                    />
-                    <Route
-                        path="/products/:id"
-                        element={
-                            <ProductDetail
-                                products={products}
-                                setProducts={setProducts}
-                                stock={stock}
-                                setStock={setStock}
-                            />
-                        }
-                    />
-                </Routes>
-            </Router>
+                        <Route
+                            path="/cart"
+                            element={
+                                <Cart
+                                    products={products}
+                                    toggleCart={toggleCart}
+                                    stock={stock}
+                                    setStock={setStock}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/favourite"
+                            element={
+                                <FavItem
+                                    products={products}
+                                    toggleFav={toggleFav}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/products/:id"
+                            element={
+                                <ProductDetail
+                                    toggleCart={toggleCart}
+                                    products={products}
+                                    setProducts={setProducts}
+                                    stock={stock}
+                                    setStock={setStock}
+                                />
+                            }
+                        />
+                    </Routes>
+                </Router>
+            </stockContext.Provider>
         </div>
     );
 }
