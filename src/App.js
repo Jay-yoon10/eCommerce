@@ -5,15 +5,17 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import CarouselHome from "./components/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useEffect, useState } from "react";
-import Dashboard from "./containers/Dashboard";
-import CartsItem from "./containers/CartsItem/CartsItem";
+import Carts from "./components/Carts";
 import FavItem from "./containers/FavItem/FavItem";
 import ProductDetail from "./components/ProductDetail";
 import Cart from "./containers/Cart";
+import ProductList from "./containers/ProductList";
+import { Provider } from "react-redux";
+import { combineReducers, createStore } from "redux";
 import {
     getFBProducts,
     deleteProducts,
-    updateProducts,
+    updateFBProducts,
     createProducts,
 } from "./services/products";
 import firestore from "./firebase";
@@ -28,6 +30,49 @@ function App() {
         return a.Quantity;
     });
     const [stock, setStock] = useState(0);
+    console.log("App, display items are ", displayItems);
+
+    let alertState = true;
+    const reducer2 = (state = alertState, action) => {
+        if (action.type === "buttonClicked") {
+            const state = false;
+            return state;
+        }
+        return state;
+    };
+
+    let initialValue = products;
+    // console.log("initialValue is", initialValue);
+    const reducer = (state = [], action) => {
+        if (action.type === "addItem") {
+            const exist = state.findIndex((a) => {
+                // console.log("action.payload.title", action.payload.title);
+                // console.log("a.title", a.title);
+
+                return a.title === action.payload.title;
+            });
+            if (exist >= 0) {
+                const copy = [...state];
+                copy[exist].Quantity++;
+                return copy;
+            } else {
+                const copy = [...state];
+                copy.push(action.payload);
+                return copy;
+            }
+        } else if (action.type === "stockIncrement") {
+            const copy = [...state];
+            copy[action.data].Quantity++;
+            return copy;
+        } else if (action.type === "stockDecrement") {
+            const copy = [...state];
+            copy[action.data].Quantity--;
+            return copy;
+        }
+        return state;
+    };
+
+    let store = createStore(combineReducers({ reducer, reducer2 }));
 
     const getStock = async () => {
         setStock(qty);
@@ -35,49 +80,22 @@ function App() {
     useEffect(() => {
         getStock();
     }, []);
-    // console.log("stock ", stock);
-    // const [fbProducts, setFbProducts] = useState([]);
 
-    const db = firebase.firestore();
-    // const getStock = async () => {
-    //     setStock(
-    //         db
-    //             .collection("product")
-    //             .get()
-    //             .then((snap) => {
-    //                 snap.forEach((item) => {
-    //                     item.data().Quantity;
-    //                 });
-    //             }),
-    //     );
-    // };
-    // useEffect(() => {
-    //     getStock();
-    // }, []);
-    // const getProducts = async () => {
-    //     const response = await fetch("https://fakestoreapi.com/products");
-    //     const data = await response.json();
-    //     setProducts(data);
-    // };
     const getData = async () => {
         const data = await getFBProducts();
         setProducts(data);
     };
+
+    const handleChange = async (updateRecord) => {
+        const { id, ...record } = updateRecord;
+        await updateFBProducts(id, record);
+        getData();
+    };
+
     useEffect(() => {
         getData();
     }, []);
-    // console.log("fbProduct is :", products);
-    // const fetchDB = async () => {
-    //     const response = db.collection("product");
-    //     const firestoreData = await response.get();
-    //     firestoreData.forEach((item) => {
-    //         setStock([item.Quantity]);
-    //     });
-    // };
-    //
-    // useEffect(() => {
-    //     fetchDB();
-    // }, []);
+
     const updateProducts = () => {
         setDisplayItems(
             products.filter((product) => {
@@ -111,41 +129,107 @@ function App() {
     useEffect(() => {
         updateProducts();
     }, [search, products]);
-    //
-    // useEffect(() => {
-    //     getProducts();
-    // }, []);
 
-    // products.forEach((obj, i) => {
-    //     {
-    //         return db.collection("product").add({
-    //             id: obj.id,
-    //             title: obj.title,
-    //             category: obj.category,
-    //             description: obj.description,
-    //             price: obj.price,
-    //             image: obj.image,
-    //             ratingRate: obj.rating.rate,
-    //             ratingCount: obj.rating.count,
-    //         });
-    //     }
-    // });
-
-    // const handleCreate = async (newRecord) => {
-    //     await createProducts(newRecord);
-    //     getProducts();
-    // };
     return (
         <div className="App">
-            <stockContext.Provider value={stock}>
-                <Router>
-                    <NavBar handleSearch={setSearch} />
-                    <Routes>
-                        <Route
-                            path="/dashboard"
-                            element={<CarouselHome products={products} />}
-                        />
-                        <Route
+            <Provider store={store}>
+                <stockContext.Provider value={stock}>
+                    <Router>
+                        <NavBar handleSearch={setSearch} />
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={<CarouselHome products={products} />}
+                            />
+                            <Route
+                                path="/product"
+                                element={
+                                    <ProductList
+                                        toggleCart={toggleCart}
+                                        products={products}
+                                        toggleFav={toggleFav}
+                                        onChange={handleChange}
+                                    />
+                                }
+                            />
+                            {/* 
+                            <Route
+                                path="/cart"
+                                element={
+                                    <Cart
+                                        products={products}
+                                        toggleCart={toggleCart}
+                                        stock={stock}
+                                        setStock={setStock}
+                                        onChange={handleChange}
+                                    />
+                                }
+                            /> */}
+                            <Route
+                                path="/carts"
+                                element={
+                                    <Carts
+                                        onChange={handleChange}
+                                        products={products}
+                                    />
+                                }
+                            />
+                            <Route
+                                path="/favourite"
+                                element={
+                                    <FavItem
+                                        products={products}
+                                        toggleFav={toggleFav}
+                                    />
+                                }
+                            />
+                            <Route
+                                path="/products/:id"
+                                element={
+                                    <ProductDetail
+                                        toggleCart={toggleCart}
+                                        products={products}
+                                        setProducts={setProducts}
+                                        stock={stock}
+                                        setStock={setStock}
+                                    />
+                                }
+                            />
+                        </Routes>
+                    </Router>
+                </stockContext.Provider>
+            </Provider>
+        </div>
+    );
+}
+
+export default App;
+
+// console.log("stock ", stock);
+
+// const getStock = async () => {
+//     setStock(
+//         db
+//             .collection("product")
+//             .get()
+//             .then((snap) => {
+//                 snap.forEach((item) => {
+//                     item.data().Quantity;
+//                 });
+//             }),
+//     );
+// };
+// useEffect(() => {
+//     getStock();
+// }, []);
+// const getProducts = async () => {
+//     const response = await fetch("https://fakestoreapi.com/products");
+//     const data = await response.json();
+//     setProducts(data);
+// };
+
+{
+    /* <Route
                             path="/product"
                             element={
                                 <Dashboard
@@ -155,8 +239,10 @@ function App() {
                                     toggleFav={toggleFav}
                                 />
                             }
-                        />
-                        {/* <Route
+                        /> */
+}
+{
+    /* <Route
                         path="/cart"
                         element={
                             <CartsItem
@@ -165,44 +251,5 @@ function App() {
                                 stock={setStock}
                             />
                         }
-                    /> */}
-                        <Route
-                            path="/cart"
-                            element={
-                                <Cart
-                                    products={products}
-                                    toggleCart={toggleCart}
-                                    stock={stock}
-                                    setStock={setStock}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/favourite"
-                            element={
-                                <FavItem
-                                    products={products}
-                                    toggleFav={toggleFav}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/products/:id"
-                            element={
-                                <ProductDetail
-                                    toggleCart={toggleCart}
-                                    products={products}
-                                    setProducts={setProducts}
-                                    stock={stock}
-                                    setStock={setStock}
-                                />
-                            }
-                        />
-                    </Routes>
-                </Router>
-            </stockContext.Provider>
-        </div>
-    );
+                    /> */
 }
-
-export default App;

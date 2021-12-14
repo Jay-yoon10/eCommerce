@@ -4,7 +4,6 @@ import { faCartArrowDown } from "@fortawesome/free-solid-svg-icons";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import ProductDetail from "../ProductDetail";
 
 const ProductCard = ({ product, toggleCart, toggleFav }) => {
     const imgURL = product.image;
@@ -23,6 +22,7 @@ const ProductCard = ({ product, toggleCart, toggleFav }) => {
         <div className={styles.Product}>
             <div className={styles.Product__Box}>
                 <img
+                    alt="product imge"
                     className={styles.Product__Img}
                     src={imgURL}
                     onClick={() => {

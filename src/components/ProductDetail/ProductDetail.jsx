@@ -3,32 +3,26 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Stock from "../Stock";
 import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
+import TabContent from "../TabContent";
+import { CSSTransition } from "react-transition-group";
+import styles from "./ProductDetail.module.scss";
+import { useDispatch, useSelector } from "react-redux";
 
-const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
+const ProductDetail = ({ onChange, products, stock, setStock, toggleCart }) => {
+    let dispatch = useDispatch();
     const [alert, setAlert] = useState(true);
-    // const [item, setItem] = useState([]);
-    // const [inputData, setInputData] = useState("");
-    // const [newQty, setNewQty] = useState(stock);
+    const [switchOn, setSwitchOn] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
     let params = useParams();
     const sortedProducts = products.sort((a, b) => {
         return a.id - b.id;
     });
-    // const getItem = async () => {
-    //     // const response = await fetch(
-    //     //     `https://fakestoreapi.com/products/${params.id}`,
-    //     // );
-    //     // const data = await response.json();
-    //     const data = await products;
-    //     setItem(data);
-    // };
-    // useEffect(() => {
-    //     getItem(params.id);
-    // }, []);
-    const handleCart = () => {
-        toggleCart(sortedProducts[params.id - 1]);
-    };
-    // const handleDecrement = () => {
-    //     setStock(sortedProducts[params.id - 1].Quantity - 1);
+    // console.log("params", params);
+
+    console.log("Sortedproducts", sortedProducts);
+    // const handleCart = () => {
+    //     toggleCart(sortedProducts[params.id - 1]);
     // };
 
     useEffect(() => {
@@ -39,21 +33,10 @@ const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
             clearTimeout(timer);
         };
     }, []);
-    // let { id } = useParams();
-    // const matchingItem = products.find(function (product) {
-    //     return product.id == id;
-    // });
+
     let navigate = useNavigate();
     let imgURL = sortedProducts[params.id - 1].image;
 
-    // console.log("item is equal to ", item);
-    // const toFind = item.map((x, i) => {
-    //     if ((x.id = params)) {
-    //         let found = x;
-    //         return found;
-    //     }
-    // });
-    // console.log("toFind is equal to ", toFind);
     return (
         <div className="container">
             <div>
@@ -76,7 +59,7 @@ const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
 
             <div className="row">
                 <div className="col-md-6">
-                    <img src={imgURL} width="100%" />
+                    <img alt="product" src={imgURL} width="100%" />
                 </div>
 
                 <div className="col-md-6 mt-4">
@@ -99,7 +82,23 @@ const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
                     >
                         Order
                     </button> */}
-                    <button className="btn btn-danger" onClick={handleCart}>
+                    {/* <button className="btn btn-danger" onClick={handleCart}> */}
+                    <button
+                        className="btn btn-danger"
+                        onClick={() => {
+                            dispatch({
+                                type: "addItem",
+                                payload: {
+                                    id: sortedProducts[params.id - 1].id,
+                                    title: sortedProducts[params.id - 1].title,
+                                    Quantity:
+                                        sortedProducts[params.id - 1].Quantity,
+                                    price: sortedProducts[params.id - 1].price,
+                                },
+                            });
+                            navigate("/carts");
+                        }}
+                    >
                         Add to Cart
                     </button>
                     <button
@@ -113,8 +112,41 @@ const ProductDetail = ({ products, stock, setStock, toggleCart }) => {
                     </Link>
                 </div>
             </div>
+            <Nav className="mt=5" variant="tabs" defaultActiveKey="link-0">
+                <Nav.Item>
+                    <Nav.Link
+                        eventKey="link-0"
+                        onClick={() => {
+                            setSwitchOn(false);
+                            setActiveTab(0);
+                        }}
+                    >
+                        Active
+                    </Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link
+                        eventKey="link-1"
+                        onClick={() => {
+                            setSwitchOn(false);
+                            setActiveTab(1);
+                        }}
+                    >
+                        Option 2
+                    </Nav.Link>
+                </Nav.Item>
+            </Nav>
+            <CSSTransition in={switchOn} classNames="transition" timeout={500}>
+                <TabContent activeTab={activeTab} setSwitchOn={setSwitchOn} />
+            </CSSTransition>
         </div>
     );
 };
-
+// const stateToProps = (state) => {
+//     return {
+//         state: state.reducer,
+//         alertOn: state.reducer2,
+//     };
+// };
+// export default connect(stateToProps)(ProductDetail);
 export default ProductDetail;

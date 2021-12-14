@@ -1,6 +1,5 @@
 import { Carousel } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
 import styles from "./Carousel.module.scss";
 const CarouselHome = ({ products }) => {
     return (
@@ -12,11 +11,11 @@ const CarouselHome = ({ products }) => {
                 let className = styles.CarouselImg;
                 return (
                     <Carousel.Item>
-                        <div className={className}>
-                            <img src={url} />
+                        <div key={i} className={className}>
+                            <img alt="product" src={url} />
                         </div>
                         <Carousel.Caption>
-                            <h3>{title}</h3>
+                            <h3 key={i}>{title}</h3>
                             <p>{info}</p>
                         </Carousel.Caption>
                     </Carousel.Item>

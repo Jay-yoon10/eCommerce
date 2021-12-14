@@ -14,19 +14,16 @@ const NavBar = ({ handleSearch }) => {
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="me-auto">
                             <Nav.Link>
-                                <Link to="/dashboard">Home</Link>
+                                <Link to="/">Home</Link>
                             </Nav.Link>
                             <Nav.Link>
                                 <Link to="/product">Product</Link>
                             </Nav.Link>
                             <Nav.Link>
-                                <Link to="/cart">Cart</Link>
+                                <Link to="/carts">Carts</Link>
                             </Nav.Link>
                             <Nav.Link>
                                 <Link to="/favourite">Favourites</Link>
-                            </Nav.Link>
-                            <Nav.Link>
-                                <Link to="/detail/id">Details</Link>
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>

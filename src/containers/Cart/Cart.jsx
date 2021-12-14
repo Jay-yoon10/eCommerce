@@ -2,17 +2,21 @@ import React from "react";
 // import ProductList from "../ProductList";
 import { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import styles from "./Cart.module.scss";
-const Cart = ({ products, stock, toggleCart, setStock }) => {
+const Cart = ({ onChange, products, stock, toggleCart, setStock }) => {
     const [cartItems, setCartItems] = useState(
         products.filter((product) => product.isCart),
     );
     const [quantity, setQuantity] = useState(1);
-    const [currentQty, setCurrentQty] = useState(quantity);
-
+    const [remainingQty, setRemainingCurrentQty] = useState(cartItems.quantity);
+    console.log("cartItem is ", cartItems);
+    // console.log("stock is ", stock);
     const getQuantity = () => {
         setQuantity(quantity);
+    };
+    const getRemainingQuantity = () => {
+        setRemainingCurrentQty(remainingQty - quantity);
     };
 
     const handleIncrement = () => {
@@ -22,9 +26,16 @@ const Cart = ({ products, stock, toggleCart, setStock }) => {
     const handleDecrement = () => {
         if (quantity > 0) setQuantity(quantity - 1);
     };
-    useEffect(() => {
-        getQuantity();
-    }, []);
+    // useEffect(() => {
+    //     getQuantity();
+    // }, []);
+    // useEffect(() => {
+    //     onchange({
+    //         ...products,
+    //         quantity:remainingQty,
+    //     })
+    //     getRemainingQuantity();
+    // }, []);
 
     const cartLength = cartItems.length;
     useEffect(() => {
@@ -55,7 +66,7 @@ const Cart = ({ products, stock, toggleCart, setStock }) => {
                                             <td>{i + 1}</td>
                                             <td>{a.title}</td>
                                             <td>${a.price.toFixed(2)}</td>
-                                            <td>{quantity}</td>
+                                            <td>{a.quantity}</td>
                                             <td>
                                                 <button
                                                     onClick={handleIncrement}
@@ -88,7 +99,7 @@ const Cart = ({ products, stock, toggleCart, setStock }) => {
                                 <td>-</td>
                                 <td>-</td>
                                 <td>Total Qty : </td>
-                                <td>{currentQty}</td>
+                                <td>Qty</td>
                                 <td>Total Price :</td>
                                 <td>2</td>
                             </tr>

@@ -1,16 +1,10 @@
 import firestore from "./../firebase";
 
 export const getFBProducts = async () => {
-    // Firestore.collection
-    // - https://firebase.google.com/docs/reference/js/firebase.firestore.Firestore#collection
-    // returns CollectionReference:
-    // - https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference
     const col = firestore.collection("product");
 
-    // CollectionReference.get => Promise<QuerySnapshot>
     const queryData = await col.get();
 
-    // QuerySnapshot.docs => Array<QueryDocumentSnapshot>
     const documents = queryData.docs;
 
     return documents.map((doc) => ({
@@ -36,7 +30,7 @@ export const deleteProducts = async (id) => {
 };
 
 // U in CRUD
-export const updateProducts = async (id, record) => {
+export const updateFBProducts = async (id, record) => {
     const ref = firestore.collection("product").doc(id);
     await ref.update(record);
 };
