@@ -3,3 +3,24 @@ img {
     height: 250px;
     margin-bottom: 50px;
 }
+.Carousel {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    &__title {
+        color: black;
+        font-weight: 600;
+    }
+    &__info {
+        color: black;
+        display: -webkit-box;
+
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3; /* Number of lines displayed before it truncate */
+        overflow: hidden;
+    }
+}
+
+.Carousel__caption {
+    margin-top: 150px;
+}

@@ -1,13 +1,14 @@
 .Product {
     display: flex;
-    // justify-content: center;
-    // align-items: center;
     flex-direction: column;
     border: 2px solid burlywood;
     margin: 20px;
     width: 400px;
     height: 600px;
-
+    &__title {
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
     &__Img {
         width: 150px;
     }
@@ -19,8 +20,24 @@
         overflow-x: scroll;
         overflow-y: none;
     }
+    &__Cat {
+        margin: 15px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        &__category {
+            font-size: larger;
+            font-weight: 600;
+        }
+    }
 }
-
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: larger;
+    margin-bottom: 15px;
+}
 .cartIcon {
     &_On {
         color: darkblue;

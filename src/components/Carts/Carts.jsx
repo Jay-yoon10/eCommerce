@@ -1,31 +1,27 @@
 import { Table } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const Carts = (products, onChange, buttonPlus) => {
+const Carts = ({ products }) => {
     let state = useSelector((state) => state.reducer);
     let alertOn = useSelector((state) => state.reducer2);
     let dispatch = useDispatch();
+    const [formQty, setFormQty] = useState(1);
 
-    const [quantity, setQuantity] = useState(
-        products.products.map((a) => {
-            return a.Quantity;
-        }),
-    );
+    const handleQtyChange = (newQty) => {
+        if (newQty < 0) return;
+        setFormQty(newQty);
+    };
+    console.log("products value is ", products);
 
-    const product = products.products.map((a, i, array) => {
-        return a;
-    });
+    const increment = () => {
+        handleQtyChange(formQty + 1);
+    };
 
-    console.log("products value is ", products.products);
-    // console.log("cart new products are ", products);
-    // console.log("cart new product is ", product.Quantity);
-    // useEffect(() => {
-    //     onChange();
-    // }, [quantity]);
-    // console.log("products in cart is ");
+    const decrement = () => {
+        handleQtyChange(formQty - 1);
+    };
 
-    // console.log("products keys in cart is ", Object.keys[products]);
     return (
         <div>
             <Table responsive="sm">
@@ -33,9 +29,10 @@ const Carts = (products, onChange, buttonPlus) => {
                     <tr>
                         <th>#</th>
                         <th>Product name</th>
-                        <th>qty</th>
-                        <th>price</th>
-                        <th>change</th>
+                        <th>Available Stock</th>
+                        <th>QTY</th>
+                        <th>Price</th>
+                        <th>Change</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -46,26 +43,32 @@ const Carts = (products, onChange, buttonPlus) => {
                                 <td>{i + 1}</td>
                                 <td>{a.title}</td>
                                 <td>{a.Quantity}</td>
-                                <td>AU$ {a.price}</td>
+                                <td>{formQty}</td>
+                                <td>AU$ {a.price * formQty} </td>
+
                                 <td>
                                     <button
                                         onClick={() => {
-                                            dispatch({
-                                                type: "stockIncrement",
-                                                data: i,
-                                            });
+                                            increment();
+                                            if (formQty >= 1) {
+                                                dispatch({
+                                                    type: "stockDecrement",
+                                                    data: i,
+                                                });
+                                            }
                                         }}
                                     >
                                         +
                                     </button>
                                     <button
                                         onClick={() => {
-                                            setQuantity(
+                                            decrement();
+                                            if (formQty > 1) {
                                                 dispatch({
-                                                    type: "stockDecrement",
+                                                    type: "stockIncrement",
                                                     data: i,
-                                                }),
-                                            );
+                                                });
+                                            }
                                         }}
                                     >
                                         -
@@ -76,25 +79,7 @@ const Carts = (products, onChange, buttonPlus) => {
                     })}
                 </tbody>
             </Table>
-            <Table responsive="sm">
-                <thead>
-                    <tr></tr>
-                    <tr>
-                        <th>#</th>
-                        <th>qty</th>
-                        <th>price</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </Table>
+
             {alertOn === true ? (
                 <div>
                     <p>Sale Ends Soon ! Hurry!</p>
@@ -111,10 +96,3 @@ const Carts = (products, onChange, buttonPlus) => {
     );
 };
 export default Carts;
-// const stateToProps = (state) => {
-//     return {
-//         state: state.reducer,
-//         alertOn: state.reducer2,
-//     };
-// };
-// export default connect(stateToProps)(Carts);

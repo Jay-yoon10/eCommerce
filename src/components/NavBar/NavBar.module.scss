@@ -1,0 +1,19 @@
+.navbar {
+    font-size: large;
+
+    &:active {
+        background-color: #666;
+        color: white;
+    }
+    &__selection {
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        &__home {
+            list-style: none;
+            outline: none;
+        }
+    }
+}

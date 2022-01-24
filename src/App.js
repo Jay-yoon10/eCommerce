@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import Carts from "./components/Carts";
 import FavItem from "./containers/FavItem/FavItem";
 import ProductDetail from "./components/ProductDetail";
-import Cart from "./containers/Cart";
 import ProductList from "./containers/ProductList";
 import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
@@ -152,19 +151,7 @@ function App() {
                                     />
                                 }
                             />
-                            {/* 
-                            <Route
-                                path="/cart"
-                                element={
-                                    <Cart
-                                        products={products}
-                                        toggleCart={toggleCart}
-                                        stock={stock}
-                                        setStock={setStock}
-                                        onChange={handleChange}
-                                    />
-                                }
-                            /> */}
+
                             <Route
                                 path="/carts"
                                 element={
@@ -204,52 +191,3 @@ function App() {
 }
 
 export default App;
-
-// console.log("stock ", stock);
-
-// const getStock = async () => {
-//     setStock(
-//         db
-//             .collection("product")
-//             .get()
-//             .then((snap) => {
-//                 snap.forEach((item) => {
-//                     item.data().Quantity;
-//                 });
-//             }),
-//     );
-// };
-// useEffect(() => {
-//     getStock();
-// }, []);
-// const getProducts = async () => {
-//     const response = await fetch("https://fakestoreapi.com/products");
-//     const data = await response.json();
-//     setProducts(data);
-// };
-
-{
-    /* <Route
-                            path="/product"
-                            element={
-                                <Dashboard
-                                    products={displayItems}
-                                    setSearch={setSearch}
-                                    toggleCart={toggleCart}
-                                    toggleFav={toggleFav}
-                                />
-                            }
-                        /> */
-}
-{
-    /* <Route
-                        path="/cart"
-                        element={
-                            <CartsItem
-                                products={products}
-                                toggleCart={toggleCart}
-                                stock={setStock}
-                            />
-                        }
-                    /> */
-}

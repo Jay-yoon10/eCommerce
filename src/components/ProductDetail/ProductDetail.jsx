@@ -18,12 +18,6 @@ const ProductDetail = ({ onChange, products, stock, setStock, toggleCart }) => {
     const sortedProducts = products.sort((a, b) => {
         return a.id - b.id;
     });
-    // console.log("params", params);
-
-    console.log("Sortedproducts", sortedProducts);
-    // const handleCart = () => {
-    //     toggleCart(sortedProducts[params.id - 1]);
-    // };
 
     useEffect(() => {
         let timer = setTimeout(() => {
@@ -43,12 +37,6 @@ const ProductDetail = ({ onChange, products, stock, setStock, toggleCart }) => {
                 <Link to={`/products/${params.id}`}></Link>
                 <title>Product Detail</title>
             </div>
-            {/* {inputData}
-            <input
-                onChange={(e) => {
-                    setInputData(e.target.value);
-                }}
-            /> */}
 
             {alert === true ? (
                 <div className="my-alert">
@@ -76,13 +64,7 @@ const ProductDetail = ({ onChange, products, stock, setStock, toggleCart }) => {
                         stock={stock}
                         params={params}
                     />
-                    {/* <button
-                        className="btn btn-danger"
-                        onClick={handleDecrement}
-                    >
-                        Order
-                    </button> */}
-                    {/* <button className="btn btn-danger" onClick={handleCart}> */}
+
                     <button
                         className="btn btn-danger"
                         onClick={() => {
@@ -142,11 +124,5 @@ const ProductDetail = ({ onChange, products, stock, setStock, toggleCart }) => {
         </div>
     );
 };
-// const stateToProps = (state) => {
-//     return {
-//         state: state.reducer,
-//         alertOn: state.reducer2,
-//     };
-// };
-// export default connect(stateToProps)(ProductDetail);
+
 export default ProductDetail;

@@ -1,19 +1,24 @@
 import React from "react";
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import styles from "./NavBar.module.scss";
 const NavBar = ({ handleSearch }) => {
     const handleChange = (e) => {
         handleSearch(e.target.value);
     };
     return (
         <div>
-            <Navbar bg="light" expand="lg">
+            <Navbar expand="lg" className={styles.navbar}>
                 <Container>
-                    <Navbar.Brand>Jay Mall</Navbar.Brand>
+                    <Navbar.Brand className="fw-bold fc-white py-3">
+                        Jay Mall
+                    </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
-                            <Nav.Link>
+                        <Nav className={styles.navbar__selection}>
+                            <Nav.Link
+                                className={styles.navbar__selection__home}
+                            >
                                 <Link to="/">Home</Link>
                             </Nav.Link>
                             <Nav.Link>

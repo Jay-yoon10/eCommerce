@@ -11,59 +11,27 @@ const CarouselHome = ({ products }) => {
                 let className = styles.CarouselImg;
                 return (
                     <Carousel.Item>
-                        <div key={i} className={className}>
-                            <img alt="product" src={url} />
+                        <div className={styles.Carousel}>
+                            <div key={i} className={className}>
+                                <img alt="product" src={url} />
+                            </div>
+                            <div className={styles.Carousel__caption}>
+                                <Carousel.Caption>
+                                    <h3
+                                        className={styles.Carousel__title}
+                                        key={i}
+                                    >
+                                        {title.substring(0, 25)} ...
+                                    </h3>
+                                    <p className={styles.Carousel__info}>
+                                        {info.substring(0, 300)}...
+                                    </p>
+                                </Carousel.Caption>
+                            </div>
                         </div>
-                        <Carousel.Caption>
-                            <h3 key={i}>{title}</h3>
-                            <p>{info}</p>
-                        </Carousel.Caption>
                     </Carousel.Item>
                 );
             })}
-            {/* <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://codingapple1.github.io/shop/shoes1.jpg"
-                    alt="First slide"
-                />
-                <Carousel.Caption>
-                    <h3>First slide label</h3>
-                    <p>
-                        Nulla vitae elit libero, a pharetra augue mollis
-                        interdum.
-                    </p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://codingapple1.github.io/shop/shoes1.jpg"
-                    alt="Second slide"
-                />
-
-                <Carousel.Caption>
-                    <h3>Second slide label</h3>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    </p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <img
-                    className="d-block w-100"
-                    src="https://codingapple1.github.io/shop/shoes1.jpg"
-                    alt="Third slide"
-                />
-
-                <Carousel.Caption>
-                    <h3>Third slide label</h3>
-                    <p>
-                        Praesent commodo cursus magna, vel scelerisque nisl
-                        consectetur.
-                    </p>
-                </Carousel.Caption>
-            </Carousel.Item> */}
         </Carousel>
     );
 };
