@@ -145,7 +145,7 @@ function App() {
                                 element={
                                     <ProductList
                                         toggleCart={toggleCart}
-                                        products={products}
+                                        products={displayItems}
                                         toggleFav={toggleFav}
                                         onChange={handleChange}
                                     />
