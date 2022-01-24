@@ -1,6 +1,8 @@
 # **eCommerce App**
 Simple eCommerce Shopping Website with React.js, html, scss styling modules, redux, firebase-firestore, reducer.
 
+https://jay-yoon10.github.io/eCommerce/
+
 ## Getting Started with Create React App
 ### `npm start`
 
